@@ -6,6 +6,8 @@ sequenceDiagram
     activate server
     server-->>browser: URL redirect to https://studies.cs.helsinki.fi/exampleapp/notes
     deactivate server
+
+    Note right of browser: The server add the content of the submitted form to its database
     
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
