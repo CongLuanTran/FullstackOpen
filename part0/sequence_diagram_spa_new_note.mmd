@@ -1,0 +1,10 @@
+sequenceDiagram
+participant browser
+participant server
+
+browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+Note right of browser: The javascript code add the note content to the HTML document and redraw the browser before sending the content to server
+activate server
+server->>browser: [{"message": "note created"}]
+deactivate server
+Note left of server: The server only send a message as a json file confirming that it received the content

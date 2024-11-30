@@ -2,24 +2,17 @@ sequenceDiagram
     participant browser
     participant server
 
-    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
-    activate server
-    server-->>browser: URL redirect to https://studies.cs.helsinki.fi/exampleapp/notes
-    deactivate server
-
-    Note left of server: The server add the content of the submitted form to its database
-    
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa
     activate server
     server-->>browser: HTML document
     deactivate server
-            
+
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
     activate server
     server-->>browser: the css file
     deactivate server
 
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
     activate server
     server-->>browser: the JavaScript file
     deactivate server
