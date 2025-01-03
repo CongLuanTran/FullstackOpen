@@ -8,8 +8,8 @@ export const Persons = ({ persons, filter }) => (
     {persons
       .filter((person) => person.name.toLowerCase().includes(filter.toLowerCase())
       )
-      .map((person, id) => (
-        <Person key={id} person={person} />
+      .map(person => (
+        <Person key={person.id} person={person} />
       ))}
   </div>
 )
