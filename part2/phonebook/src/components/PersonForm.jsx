@@ -1,51 +1,47 @@
-import phonebook from '../services/phonebook'
-import { useState } from 'react'
+import phonebook from "../services/phonebook";
+import { useState } from "react";
 
 export const PersonForm = ({ list, setter }) => {
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const handleNewName = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
-  }
+    console.log(event.target.value);
+    setNewName(event.target.value);
+  };
 
   const handleNewNumber = (event) => {
-    console.log(event.target.value)
-    setNewNumber(event.target.value)
-  }
+    console.log(event.target.value);
+    setNewNumber(event.target.value);
+  };
 
   const addPerson = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const person = {
       name: newName,
       number: newNumber,
-    }
-    const collision = list.find(p => p.name = person.name)
+    };
+    const collision = list.find((p) => (p.name = person.name));
     if (
-      collision != undefined
-      && window.confirm(
-        `${person.name} is already added to phonebook, `
-        + 'replace old number with a new one?'
+      collision != undefined &&
+      window.confirm(
+        `${person.name} is already added to phonebook, ` +
+          "replace old number with a new one?",
       )
     ) {
-      phonebook
-        .update(collision.id, person)
-        .then(response => {
-          console.log(response)
-          setter(list.map(p => p.id === collision.id ? response : p))
-        })
+      phonebook.update(collision.id, person).then((response) => {
+        console.log(response);
+        setter(list.map((p) => (p.id === collision.id ? response : p)));
+      });
     } else {
-      phonebook
-        .create(person)
-        .then(response => {
-          console.log(response)
-          setter(list.concat(response))
-        })
+      phonebook.create(person).then((response) => {
+        console.log(response);
+        setter(list.concat(response));
+      });
     }
-    setNewName('')
-    setNewNumber('')
-  }
+    setNewName("");
+    setNewNumber("");
+  };
 
   return (
     <form onSubmit={addPerson}>
@@ -56,8 +52,8 @@ export const PersonForm = ({ list, setter }) => {
         number: <input value={newNumber} onChange={handleNewNumber} />
       </div>
       <div>
-        <button type='submit'>add</button>
+        <button type="submit">add</button>
       </div>
     </form>
-  )
-} 
+  );
+};
