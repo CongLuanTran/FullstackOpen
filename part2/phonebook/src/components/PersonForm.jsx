@@ -21,8 +21,20 @@ export const PersonForm = ({ list, setter }) => {
       name: newName,
       number: newNumber,
     }
-    if (list.some((p) => p.name === person.name)) {
-      alert(`${person.name} is already in the phonebook`)
+    const collision = list.find(p => p.name = person.name)
+    if (
+      collision != undefined
+      && window.confirm(
+        `${person.name} is already added to phonebook, `
+        + 'replace old number with a new one?'
+      )
+    ) {
+      phonebook
+        .update(collision.id, person)
+        .then(response => {
+          console.log(response)
+          setter(list.map(p => p.id === collision.id ? response : p))
+        })
     } else {
       phonebook
         .create(person)

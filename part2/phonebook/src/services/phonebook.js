@@ -13,8 +13,14 @@ const create = newObject => {
         .then(response => response.data)
 }
 
+const update = (id, newObject) => {
+    return axios
+        .put(`${dbUrl}/${id}`, newObject)
+        .then(response => response.data)
+}
+
 const remove = id => {
     axios.delete(`${dbUrl}/${id}`)
 }
 
-export default { getAll, create, remove }
+export default { getAll, create, remove, update }
