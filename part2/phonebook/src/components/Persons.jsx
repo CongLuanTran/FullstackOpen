@@ -1,15 +1,29 @@
+import phonebook from "../services/phonebook"
+
 const Person = ({ person }) => (
-  <div>
+  <>
     {person.name} {person.number}
-  </div>
+  </>
 )
-export const Persons = ({ persons, filter }) => (
-  <div>
-    {persons
-      .filter((person) => person.name.toLowerCase().includes(filter.toLowerCase())
-      )
-      .map(person => (
-        <Person key={person.id} person={person} />
-      ))}
-  </div>
-)
+
+export const Persons = ({ persons, setter, filter }) => {
+  const handleRemove = (person) => {
+    if (window.confirm(`Delete ${person.name}`)) {
+      phonebook.remove(person.id)
+      setter(persons.filter(p => p.id != person.id))
+    }
+  }
+  return (
+    <div>
+      {persons
+        .filter((person) => person.name.toLowerCase().includes(filter.toLowerCase())
+        )
+        .map(person => (
+          <p key={person.id}>
+            <Person person={person} /> &#20;
+            <button onClick={() => handleRemove(person)}>delete</button>
+          </p>
+        ))}
+    </div>
+  )
+}

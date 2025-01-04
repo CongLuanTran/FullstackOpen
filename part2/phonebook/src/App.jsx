@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { Persons } from './components/Persons'
 import { PersonForm } from './components/PersonForm'
 import { Filter } from './components/Filter'
@@ -31,7 +30,7 @@ const App = () => {
       <h3>Add a new</h3>
       <PersonForm list={persons} setter={setPersons} />
       <h3>Numbers</h3>
-      <Persons persons={persons} filter={newFilter} />
+      <Persons persons={persons} setter={setPersons} filter={newFilter} />
     </div>
   )
 }
