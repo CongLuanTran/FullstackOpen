@@ -21,22 +21,22 @@ export const PersonForm = ({ persons, setPersons, setErrorMessage }) => {
       name: newName,
       number: newNumber,
     };
-    const collision = persons.find((p) => (p.name = person.name));
-    if (
-      collision != undefined &&
-      window.confirm(
+    const collision = persons.find((p) => (p.name === person.name));
+    if (collision != undefined) {
+      if (window.confirm(
         `${person.name} is already added to phonebook, ` +
-          "replace old number with a new one?",
-      )
-    ) {
-      phonebook.update(collision.id, person).then((response) => {
-        console.log(response);
-        setPersons(persons.map((p) => (p.id === collision.id ? response : p)));
-      });
+        "replace old number with a new one?",
+      )) {
+        phonebook.update(collision.id, person).then((response) => {
+          console.log(response);
+          setPersons(persons.map((p) => (p.id === collision.id ? response : p)));
+        });
+      }
     } else {
       phonebook.create(person).then((response) => {
         console.log(response);
         setPersons(persons.concat(response));
+        setErrorMessage(`Added ${person.name}`)
       });
     }
     setNewName("");

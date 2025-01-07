@@ -19,10 +19,10 @@ export const Persons = ({ persons, setPersons, filter }) => {
         .filter((person) => person.name.toLowerCase().includes(filter.toLowerCase())
         )
         .map(person => (
-          <p key={person.id}>
+          <div key={person.id}>
             <Person person={person} /> &#20;
             <button onClick={() => handleRemove(person)}>delete</button>
-          </p>
+          </div>
         ))}
     </div>
   )
