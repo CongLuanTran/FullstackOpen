@@ -28,9 +28,9 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter value={newFilter} onChange={handleNewFilter} />
       <h3>Add a new</h3>
-      <PersonForm list={persons} setter={setPersons} />
+      <PersonForm persons={persons} setPersons={setPersons} />
       <h3>Numbers</h3>
-      <Persons persons={persons} setter={setPersons} filter={newFilter} />
+      <Persons persons={persons} setPersons={setPersons} filter={newFilter} />
     </div>
   )
 }

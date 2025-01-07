@@ -1,7 +1,7 @@
 import phonebook from "../services/phonebook";
 import { useState } from "react";
 
-export const PersonForm = ({ list, setter }) => {
+export const PersonForm = ({ persons, setPersons, setErrorMessage }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
@@ -21,7 +21,7 @@ export const PersonForm = ({ list, setter }) => {
       name: newName,
       number: newNumber,
     };
-    const collision = list.find((p) => (p.name = person.name));
+    const collision = persons.find((p) => (p.name = person.name));
     if (
       collision != undefined &&
       window.confirm(
@@ -31,12 +31,12 @@ export const PersonForm = ({ list, setter }) => {
     ) {
       phonebook.update(collision.id, person).then((response) => {
         console.log(response);
-        setter(list.map((p) => (p.id === collision.id ? response : p)));
+        setPersons(persons.map((p) => (p.id === collision.id ? response : p)));
       });
     } else {
       phonebook.create(person).then((response) => {
         console.log(response);
-        setter(list.concat(response));
+        setPersons(persons.concat(response));
       });
     }
     setNewName("");

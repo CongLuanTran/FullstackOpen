@@ -6,11 +6,11 @@ const Person = ({ person }) => (
   </>
 )
 
-export const Persons = ({ persons, setter, filter }) => {
+export const Persons = ({ persons, setPersons, filter }) => {
   const handleRemove = (person) => {
     if (window.confirm(`Delete ${person.name}`)) {
       phonebook.remove(person.id)
-      setter(persons.filter(p => p.id != person.id))
+      setPersons(persons.filter(p => p.id != person.id))
     }
   }
   return (
