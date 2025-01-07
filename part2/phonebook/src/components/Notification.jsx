@@ -1,15 +1,17 @@
-export const Notification = ({ message, setErrorMessage }) => {
-  if (message == null) {
+export const Notification = ({
+  message,
+  setMessage,
+  messageType,
+  setMessageType,
+}) => {
+  if (message == null || messageType == null) {
     return null;
   }
 
   setTimeout(() => {
-    setErrorMessage(null);
+    setMessage(null);
+    setMessageType(null);
   }, 3000);
 
-  return (
-    <div className='error'>
-      {message}
-    </div>
-  );
+  return <div className={messageType}>{message}</div>;
 };
