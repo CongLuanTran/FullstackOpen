@@ -1,17 +1,7 @@
-export const Notification = ({
-  message,
-  setMessage,
-  messageType,
-  setMessageType,
-}) => {
-  if (message == null || messageType == null) {
+export const Notification = ({ message }) => {
+  if (message.content == null) {
     return null;
   }
 
-  setTimeout(() => {
-    setMessage(null);
-    setMessageType(null);
-  }, 3000);
-
-  return <div className={messageType}>{message}</div>;
+  return <div className={message.type}>{message.content}</div>;
 };
