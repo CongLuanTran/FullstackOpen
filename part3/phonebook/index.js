@@ -1,7 +1,16 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
+morgan.token("data", function (request, response) {
+  if (Object.keys(request.body.length === 0)) return " ";
+  return JSON.stringify(request.body);
+});
+
 app.use(express.json());
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :data")
+);
 
 let persons = [
   {
@@ -55,32 +64,36 @@ app.delete("/api/persons/:id", (request, response) => {
 
   response.status(204).end();
 });
-//
-// const generateId = () => {
-//   const maxId =
-//     notes.length > 0 ? Math.max(...notes.map((n) => Number(n.id))) : 0;
-//   return String(maxId + 1);
-// };
-//
-// app.post("/api/notes", (request, response) => {
-//   const body = request.body;
-//
-//   if (!body.content) {
-//     return response.status(400).json({
-//       error: "content missing",
-//     });
-//   }
-//
-//   const note = {
-//     content: body.content,
-//     important: Boolean(body.important) || false,
-//     id: generateId(),
-//   };
-//
-//   notes = notes.concat(note);
-//
-//   response.json(note);
-// });
+
+const generateId = () => {
+  return String(Math.floor(Math.random() * 7 * 11 * 23 * 31));
+};
+
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "name or number is missing",
+    });
+  }
+
+  if (persons.find((p) => p.name === body.name)) {
+    return response.status(400).json({
+      error: "name must be unique",
+    });
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateId(),
+  };
+
+  persons = persons.concat(person);
+
+  response.json(person);
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
