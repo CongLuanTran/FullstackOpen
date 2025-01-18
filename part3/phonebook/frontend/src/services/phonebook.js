@@ -1,5 +1,5 @@
 import axios from "axios";
-const dbUrl = "http://localhost:3001/api/persons";
+const dbUrl = "/api/persons";
 
 const getAll = () => {
   return axios.get(dbUrl).then((response) => response.data);
