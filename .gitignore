@@ -1,4 +1,2 @@
 node_modules
-practices/*
-.*
-secret
+.env
