@@ -29,7 +29,7 @@ const App = () => {
       type: type,
     });
     setTimeout(() => {
-      setMessage({message: null})
+      setMessage({ message: null });
     }, 3000);
   };
 
@@ -43,11 +43,14 @@ const App = () => {
       return;
     }
 
-    phonebook.create(person).then((response) => {
-      console.log(response);
-      setPersons(persons.concat(response));
-      notify(`${person.name} added to phonebook`);
-    });
+    phonebook
+      .create(person)
+      .then((response) => {
+        console.log(response);
+        setPersons(persons.concat(response));
+        notify(`${person.name} added to phonebook`);
+      })
+      .catch((error) => notify(error.response.data.error, "error"));
   };
 
   const updatePerson = (id, person) => {
@@ -64,7 +67,8 @@ const App = () => {
         })
         .catch((error) => {
           console.log(error);
-          notify(`Information of ${person.name} is already removed`);
+          setPersons(persons.filter((p) => p.id !== id));
+          notify(`Information of ${person.name} is already removed`, "error");
         });
     }
   };
@@ -72,16 +76,10 @@ const App = () => {
   const removePerson = (person) => {
     const ok = window.confirm(`Delete ${person.name}`);
     if (ok) {
-      phonebook
-        .remove(person.id)
-        .then((response) => {
-          console.log(response);
-          notify(`${person.name} removed`)
-        })
-        .catch((error) => {
-          console.log(error);
-          notify(`Information of ${person.name} is already removed`);
-        });
+      phonebook.remove(person.id).then((response) => {
+        console.log(response);
+        notify(`${person.name} removed`);
+      });
       setPersons(persons.filter((p) => p.id !== person.id));
     }
   };
