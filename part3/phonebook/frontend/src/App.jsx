@@ -30,7 +30,7 @@ const App = () => {
     });
     setTimeout(() => {
       setMessage({ message: null });
-    }, 3000);
+    }, 5000);
   };
 
   const addPerson = (person) => {
@@ -50,7 +50,11 @@ const App = () => {
         setPersons(persons.concat(response));
         notify(`${person.name} added to phonebook`);
       })
-      .catch((error) => notify(error.response.data.error, "error"));
+      .catch((error) =>{ 
+        console.log(error.response.data.error)
+        notify(error.response.data.error, "error")
+      }
+    );
   };
 
   const updatePerson = (id, person) => {
