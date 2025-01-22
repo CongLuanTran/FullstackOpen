@@ -7,3 +7,14 @@ Content-Type: application/json
   "url": "localhost",
   "likes": 10
 }
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Another Test Blog",
+  "author": "Admin",
+  "url": "localhost",
+  "likes": 4
+}
