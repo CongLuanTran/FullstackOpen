@@ -2,10 +2,10 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Test Blog",
-  "author": "Admin",
-  "url": "localhost",
-  "likes": 10
+  "title": "Type wars",
+  "author": "Robert C. Martin",
+  "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+  "likes": 2
 }
 
 ###
@@ -13,8 +13,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Another Test Blog",
-  "author": "Admin",
-  "url": "localhost",
-  "likes": 4
+  "title": "TDD harms architecture",
+  "author": "Robert C. Martin",
+  "url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+  "likes": 0
 }
