@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const Blog = require('../models/blog')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
@@ -13,10 +13,10 @@ const initialBlogs = [
     likes: 2,
   },
   {
-    title: 'TDD harms architecture',
+    title: 'First class tests',
     author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-    likes: 0,
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+    likes: 10,
   }
 ]
 
@@ -39,7 +39,7 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test.only('blog unique identifier is `id`', async () => {
+test('blog unique identifier is `id`', async () => {
   const response = await api.get('/api/blogs')
   assert(response.body.every(e => {
     const keys = Object.keys(e)
@@ -81,18 +81,68 @@ test('a valid blog can be added', async () => {
   assert(titles.includes('Go To Statement Considered Harmful'))
 })
 
-test('invalid blog will return error message', async () => {
-  const badBlog = {
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    likes: 5,
+test('blog without like default to 0 like', async () => {
+  const noLike = {
+    title: 'React patterns',
+    author: 'Michael Chan',
+    url: 'https://reactpatterns.com/',
   }
 
   await api
     .post('/api/blogs')
-    .send(badBlog)
-    .expect(400)
+    .send(noLike)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+  const response = await api.get('/api/blogs')
+
+  const blogs = response.body
+
+  assert.strictEqual(blogs.length, initialBlogs.length + 1)
+
+  assert(blogs.find(blog => blog.title === 'React patterns').likes === 0)
 })
+
+describe('posting blogs without title or url return 400', () => {
+
+  test('blog without url', async () => {
+    const badBlog = {
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(badBlog)
+      .expect(400)
+  })
+
+  test('blog without title', async () => {
+    const badBlog = {
+      author: 'Edsger W. Dijkstra',
+      url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+      likes: 5,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(badBlog)
+      .expect(400)
+  })
+
+  test('blog without both', async () => {
+    const badBlog = {
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(badBlog)
+      .expect(400)
+  })
+})
+
 
 
 after(async () => {
