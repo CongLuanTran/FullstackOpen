@@ -6,25 +6,12 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 
-const initialBlogs = [
-  {
-    title: 'Type wars',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-    likes: 2,
-  },
-  {
-    title: 'First class tests',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
-    likes: 10,
-  }
-]
+const helper = require('./test_helpers')
 
 describe('when there are some blogs saved initially', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
-    await Blog.insertMany(initialBlogs)
+    await Blog.insertMany(helper.initialBlogs)
   })
 
   test('blogs are returned as json', async () => {
@@ -45,13 +32,43 @@ describe('when there are some blogs saved initially', () => {
 
   test('all inital blogs are returned', async () => {
     const response = await api.get('/api/blogs')
-    assert.strictEqual(response.body.length, initialBlogs.length)
+    assert.strictEqual(response.body.length, helper.initialBlogs.length)
   })
 
-  test('the first blog is about type wars', async () => {
+  test('a blog is about `First class tests`', async () => {
     const response = await api.get('/api/blogs')
     const titles = response.body.map(e => e.title)
-    assert(titles.includes('Type wars'))
+    assert(titles.includes('First class tests'))
+  })
+
+  describe.only('viewing a specific blog', () => {
+    test('should success with a valid id', async () => {
+      const allBlogs = await helper.blogsInDb()
+      const firstBlog = allBlogs[0]
+
+      const resultBlog = await api
+        .get(`/api/blogs/${firstBlog.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      assert.deepStrictEqual(resultBlog.body, firstBlog)
+    })
+
+    test('should return 404 for non-existing but valid IDs', async () => {
+      const validNonExistingId = await helper.nonExistingId()
+
+      await api
+        .get(`/api/blogs/${validNonExistingId}`)
+        .expect(404)
+    })
+
+    test('should return 400 for invalid IDs', async () => {
+      const invalidId = '8290482904829048989'
+
+      await api
+        .get(`/api/blogs/${invalidId}`)
+        .expect(400)
+    })
   })
 
   test('a valid blog can be added', async () => {
@@ -71,7 +88,7 @@ describe('when there are some blogs saved initially', () => {
 
     const titles = response.body.map(r => r.title)
 
-    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+    assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
 
     assert(titles.includes('Go To Statement Considered Harmful'))
   })
@@ -92,7 +109,7 @@ describe('when there are some blogs saved initially', () => {
 
     const blogs = response.body
 
-    assert.strictEqual(blogs.length, initialBlogs.length + 1)
+    assert.strictEqual(blogs.length, helper.initialBlogs.length + 1)
 
     assert(blogs.find(blog => blog.title === 'React patterns').likes === 0)
   })
