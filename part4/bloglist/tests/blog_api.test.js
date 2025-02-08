@@ -42,7 +42,7 @@ describe('when there are some blogs saved initially', () => {
   })
 
   describe('viewing a specific blog', () => {
-    test('should success with a valid id', async () => {
+    test('should succeed with a valid id', async () => {
       const allBlogs = await helper.blogsInDb()
       const firstBlog = allBlogs[0]
 
@@ -72,7 +72,7 @@ describe('when there are some blogs saved initially', () => {
   })
 
   describe('addition of a blog', () => {
-    test('should success if the blog is valid', async () => {
+    test('should succeed if the blog is valid', async () => {
       const newBlog = {
         title: 'Go To Statement Considered Harmful',
         author: 'Edsger W. Dijkstra',
@@ -152,6 +152,23 @@ describe('when there are some blogs saved initially', () => {
 
       assert.strictEqual(blogs.length, helper.initialBlogs.length + 1)
       assert(blogs.find(blog => blog.title === 'React patterns').likes === 0)
+    })
+  })
+
+  describe.only('deletion of a blog', () => {
+    test('should succeed with code 204 if the ID is valid', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
+
+      const titles = blogsAtEnd.map(r => r.title)
+      assert(!titles.includes(blogToDelete.title))
     })
   })
 })
