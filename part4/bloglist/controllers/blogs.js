@@ -24,11 +24,13 @@ blogsRouter.put('/:id', async (request, response) => {
     url: body.url,
     likes: body.likes
   }
+
   const blog =  await Blog.findByIdAndUpdate(
     request.params.id,
     update,
     { new: true, runvalidators: true, context: 'query' }
   )
+
   if (blog) {
     response.json(blog)
   } else {
