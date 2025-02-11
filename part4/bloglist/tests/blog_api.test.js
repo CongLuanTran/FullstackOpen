@@ -1,5 +1,7 @@
-const { test, after, beforeEach, describe } = require('node:test')
+const { test, after, before, beforeEach, describe } = require('node:test')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -25,8 +27,7 @@ describe('when there are some blogs saved initially', () => {
     const response = await api.get('/api/blogs')
     assert(response.body.every(e => {
       const keys = Object.keys(e)
-      return keys.includes('id')
-      && !keys.includes('_id')
+      return keys.includes('id') && !keys.includes('_id')
     }))
   })
 
@@ -72,13 +73,26 @@ describe('when there are some blogs saved initially', () => {
   })
 
   describe('addition of a blog', () => {
-    test('should succeed if the blog is valid', async () => {
+    before(async () => {
+      await User.deleteMany({})
+
+      const passwordHash = await bcrypt.hash('password', 10)
+      const user = new User({ username: 'tester', passwordHash })
+
+      await user.save()
+    })
+
+    test.only('should succeed if the blog is valid', async () => {
       const newBlog = {
         title: 'Go To Statement Considered Harmful',
         author: 'Edsger W. Dijkstra',
         url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
         likes: 5,
       }
+
+      const users = await helper.usersInDb()
+      const firstId = users.map(user => user.id)[0]
+      newBlog.userId = firstId
 
       await api
         .post('/api/blogs')
@@ -91,6 +105,7 @@ describe('when there are some blogs saved initially', () => {
 
       assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
       assert(titles.includes('Go To Statement Considered Harmful'))
+      assert( 'user' in response.body.find(blog => blog.title.includes('Go To Statement Considered Harmful')))
     })
 
     describe('should fail with status code 400 if title or url is empty', () => {
@@ -180,7 +195,7 @@ describe('when there are some blogs saved initially', () => {
     })
   })
 
-  describe.only('updating the information of an individual blog post', () => {
+  describe('updating the information of an individual blog post', () => {
     test('should succeed with status code 200 for valid IDs',  async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToUpdate = blogsAtStart[0]
