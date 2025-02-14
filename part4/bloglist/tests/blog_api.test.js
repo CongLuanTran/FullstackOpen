@@ -1,7 +1,6 @@
-const { test, after, before, beforeEach, describe } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const Blog = require('../models/blog')
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -73,16 +72,16 @@ describe('when there are some blogs saved initially', () => {
   })
 
   describe('addition of a blog', () => {
-    before(async () => {
+    beforeEach(async () => {
       await User.deleteMany({})
+      await User.insertMany(await helper.initialUsers())
+      const users = await helper.usersInDb()
+      const firstUser = users[0]
 
-      const passwordHash = await bcrypt.hash('password', 10)
-      const user = new User({ username: 'tester', passwordHash })
-
-      await user.save()
+      await Blog.updateMany({}, { $set: { user: firstUser.id } })
     })
 
-    test.only('should succeed if the blog is valid', async () => {
+    test('should succeed if the blog is valid', async () => {
       const newBlog = {
         title: 'Go To Statement Considered Harmful',
         author: 'Edsger W. Dijkstra',
@@ -101,11 +100,12 @@ describe('when there are some blogs saved initially', () => {
         .expect('Content-Type', /application\/json/)
 
       const response = await api.get('/api/blogs')
-      const titles = response.body.map(r => r.title)
+      const blogs = response.body
+      const titles = blogs.map(r => r.title)
 
-      assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+      assert.strictEqual(blogs.length, helper.initialBlogs.length + 1)
       assert(titles.includes('Go To Statement Considered Harmful'))
-      assert( 'user' in response.body.find(blog => blog.title.includes('Go To Statement Considered Harmful')))
+      assert('user' in blogs.find(blog => blog.title.includes('Go To Statement Considered Harmful')))
     })
 
     describe('should fail with status code 400 if title or url is empty', () => {
