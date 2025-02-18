@@ -205,7 +205,7 @@ describe('when there are some blogs saved initially', () => {
     })
   })
 
-  describe.only('deletion of a blog', () => {
+  describe('deletion of a blog', () => {
 
     describe('with a invalid token', () => {
       test('should fail with status code 401 ', async () => {
