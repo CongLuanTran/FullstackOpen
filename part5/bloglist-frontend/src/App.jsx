@@ -26,8 +26,8 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) { 
-      setErrorMessage('Wrong credentials') 
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -54,7 +54,7 @@ const App = () => {
       </div>
       <button type="submit">login</button>
     </form>
-  ) 
+  )
   return (
     <div>
       {loginForm}
