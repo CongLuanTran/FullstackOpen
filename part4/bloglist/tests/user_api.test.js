@@ -28,7 +28,7 @@ describe('when there is initially one user in the database', () => {
     await tester.save()
   })
 
-  describe.only('viewing all record', () => {
+  describe('viewing all record', () => {
     test('should return result as JSON', async () => {
       await api
         .get('/api/users')
