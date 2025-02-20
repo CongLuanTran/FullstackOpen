@@ -35,33 +35,49 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)} />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)} />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <>
+      <h2>log in to application</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)} />
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)} />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </>
   )
+
+  const allBlogs = () => (
+    <>
+      <h2>blogs</h2>
+      <p>{user.name} logged-in</p>
+      {
+        blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )
+      }
+    </>
+  )
+
   return (
     <div>
-      {loginForm}
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+      {
+        user === null
+          ? loginForm()
+          : allBlogs()
+      }
     </div>
   )
 }
