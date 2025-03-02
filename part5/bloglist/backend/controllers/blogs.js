@@ -18,17 +18,19 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
+  const user = request.user
 
-  const update = {
+  const updatedBlog = {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
+    user: body.user.id
   }
 
-  const blog =  await Blog.findByIdAndUpdate(
+  const blog = await Blog.findByIdAndUpdate(
     request.params.id,
-    update,
+    updatedBlog,
     { new: true, runvalidators: true, context: 'query' }
   )
 
