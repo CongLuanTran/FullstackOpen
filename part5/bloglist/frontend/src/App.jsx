@@ -122,6 +122,24 @@ const App = () => {
       })
   }
 
+  const removeBlog = (blogObject) => {
+    blogService
+      .remove(blogObject.id)
+      .then(() => {
+        setBlogs(blogs.filter((blog) => (
+          blog.id !== blogObject.id
+        )))
+      })
+      .catch(error => {
+        notify({
+          message: error,
+          isError: true
+        })
+      })
+
+  }
+
+
   const blogForm = () => (
     <div>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
@@ -159,7 +177,7 @@ const App = () => {
         blogs
           .sort((a, b) => b.likes - a.likes)
           .map(blog =>
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} />
           )
       }
     </>

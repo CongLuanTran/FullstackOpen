@@ -18,7 +18,6 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
-  const user = request.user
 
   const updatedBlog = {
     title: body.title,
@@ -49,7 +48,9 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
     return response.status(401).json({ error: 'token invalid' })
   }
 
+  user.blogs = user.blogs.filter(item => item !== blog.id)
   await blog.deleteOne()
+  await user.save()
   response.status(204).end()
 })
 
