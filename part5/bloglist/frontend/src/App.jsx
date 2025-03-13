@@ -44,14 +44,14 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
-      notify({
+      setNotification({
         message: 'wrong username or password',
         isError: true,
       })
     }
+    setUsername('')
+    setPassword('')
   }
 
   const handleLogout = () => {
@@ -83,7 +83,7 @@ const App = () => {
       marginBottom: 10,
     }
 
-    return <div style={notifyState}>{message}</div>
+    return (<div style={notifyState}>{message}</div>)
   }
 
   const addBlog = (blogObject) => {
@@ -92,12 +92,12 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        notify({
+        setNotification({
           message: `${blogObject.title} by ${blogObject.author} added`
         })
       })
       .catch(error => {
-        notify({
+        setNotification({
           message: error,
           isError: true
         })
@@ -131,7 +131,7 @@ const App = () => {
         )))
       })
       .catch(error => {
-        notify({
+        setNotification({
           message: error,
           isError: true
         })
@@ -154,6 +154,7 @@ const App = () => {
   const loginForm = () => (
     <div>
       <h2>Log in to application</h2>
+      {notify(notification)}
       <LoginForm
         username={username}
         password={password}
