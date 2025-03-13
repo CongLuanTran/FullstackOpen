@@ -110,7 +110,7 @@ const App = () => {
       .then(returnedBlog => {
         setBlogs(blogs.map((blog) => (
           blog.id === returnedBlog.id
-            ? { ...returnedBlog, user: blog.user }
+            ? returnedBlog
             : blog
         )))
       })
@@ -138,7 +138,6 @@ const App = () => {
       })
 
   }
-
 
   const blogForm = () => (
     <div>

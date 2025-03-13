@@ -21,6 +21,12 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
     updateBlog({ ...blog, likes: blog.likes + 1 })
   }
 
+  const remove = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      removeBlog(blog)
+    }
+  }
+
   return (
     <div className='blog' style={blogStyle}>
       {blog.title} {blog.author}
@@ -32,7 +38,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
           <button onClick={like}>like</button>
         </div>
         <div>{blog.user.name}</div>
-        <button onClick={() => removeBlog(blog)}>remove</button>
+        <button onClick={remove}>remove</button>
       </div>
     </div>
   )
