@@ -98,7 +98,7 @@ const App = () => {
       })
       .catch(error => {
         setNotification({
-          message: error,
+          message: error.response.data.error,
           isError: true
         })
       })
@@ -115,8 +115,8 @@ const App = () => {
         )))
       })
       .catch(error => {
-        notify({
-          message: error,
+        setNotification({
+          message: error.response.data.error,
           isError: true,
         })
       })
@@ -132,7 +132,7 @@ const App = () => {
       })
       .catch(error => {
         setNotification({
-          message: error,
+          message: error.response.data.error,
           isError: true
         })
       })
