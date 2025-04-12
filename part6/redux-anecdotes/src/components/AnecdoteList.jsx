@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux"
-import { voteFor } from "../reducers/anecdoteReducer"
+import { useDispatch, useSelector } from 'react-redux'
+import { voteFor } from '../reducers/anecdoteReducer'
 import PropTypes from 'prop-types'
 
 const Anecdote = ({ anecdote, handleClick }) => {
@@ -23,7 +23,11 @@ Anecdote.propTypes = {
 
 const AnecdoteList = () => {
 
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state =>
+    state.anecdotes.filter((anecdote) => {
+      return anecdote.content.includes(state.filter)
+    })
+  )
   const dispatch = useDispatch()
 
   return (
