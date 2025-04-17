@@ -1,10 +1,9 @@
-import { useReducer } from 'react'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useReducer } from 'react'
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
-    case 'VOTE':
-      return `anecdote '${action.content}' voted`
+    case 'SHOW':
+      return action.content
     case 'CLEAR':
       return null
     default:
@@ -22,16 +21,6 @@ export const NotificationContextProvider = (props) => {
       {props.children}
     </NotificationContext.Provider>
   )
-}
-
-export const useNotificationValue = () => {
-  const notificationAndDispatch = useContext(NotificationContext)
-  return notificationAndDispatch[0]
-}
-
-export const useNotificationDispatch = () => {
-  const notificationAndDispatch = useContext(NotificationContext)
-  return notificationAndDispatch[1]
 }
 
 export default NotificationContext
