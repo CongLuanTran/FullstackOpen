@@ -1,43 +1,46 @@
-const config = require("./utils/config");
-const express = require("express");
-const app = express();
-const cors = require("cors");
-require("express-async-errors");
-const blogsRouter = require("./controllers/blogs");
-const usersRouter = require("./controllers/users");
-const loginRouter = require("./controllers/login");
-const middleware = require("./utils/middleware");
-const logger = require("./utils/logger");
-const mongoose = require("mongoose");
+import { MONGODB_URI } from './utils/config'
+import express from 'express'
+const app = express()
+import cors from 'cors'
+import 'express-async-errors'
+import blogsRouter from './controllers/blogs'
+import usersRouter from './controllers/users'
+import loginRouter from './controllers/login'
+import {
+    requestLogger,
+    unknownEndpoint,
+    errorHandler,
+} from './utils/middleware'
+import { info, error as _error } from './utils/logger'
+import { set, connect } from 'mongoose'
 
-mongoose.set("strictQuery", false);
+set('strictQuery', false)
 
-logger.info("connecting to", config.MONGODB_URI);
+info('connecting to', MONGODB_URI)
 
-mongoose
-  .connect(config.MONGODB_URI)
-  .then(() => {
-    logger.info("connected to MongoDB");
-  })
-  .catch((error) => {
-    logger.error("error connection to MongoDB:", error.message);
-  });
+connect(MONGODB_URI)
+    .then(() => {
+        info('connected to MongoDB')
+    })
+    .catch((error) => {
+        _error('error connection to MongoDB:', error.message)
+    })
 
-app.use(cors());
-app.use(express.static("dist"));
-app.use(express.json());
-app.use(middleware.requestLogger);
+app.use(cors())
+app.use(express.static('dist'))
+app.use(express.json())
+app.use(requestLogger)
 
-app.use("/api/blogs", blogsRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/login", loginRouter);
+app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
-if (process.env.NODE_ENV === "test") {
-  const testingRouter = require("./controllers/testing");
-  app.use("/api/testing", testingRouter);
+if (process.env.NODE_ENV === 'test') {
+    const testingRouter = require('./controllers/testing')
+    app.use('/api/testing', testingRouter)
 }
 
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
-module.exports = app;
+export default app
