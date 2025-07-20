@@ -3,28 +3,28 @@ const router = express.Router()
 import { hash } from 'bcrypt'
 import User from '../models/user.js'
 
-router.post("/", async (request, response) => {
-  const { username, name, password } = request.body;
+router.post('/', async (request, response) => {
+    const { username, name, password } = request.body
 
-  if (!password || password.length < 3) {
-    return response
-      .status(400)
-      .json({ error: "password missing or too short" });
-  }
+    if (!password || password.length < 3) {
+        return response
+            .status(400)
+            .json({ error: 'password missing or too short' })
+    }
 
-  const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(password, saltRounds);
+    const saltRounds = 10
+    const passwordHash = await hash(password, saltRounds)
 
-  const user = new User({
-    username,
-    name,
-    passwordHash,
-  });
+    const user = new User({
+        username,
+        name,
+        passwordHash,
+    })
 
-  const savedUser = await user.save();
+    const savedUser = await user.save()
 
-  response.status(201).json(savedUser);
-});
+    response.status(201).json(savedUser)
+})
 
 router.get('/', async (_request, response) => {
     const users = await User.find({}).populate('blogs', {
@@ -35,4 +35,4 @@ router.get('/', async (_request, response) => {
     response.json(users)
 })
 
-module.exports = router;
+export default router
