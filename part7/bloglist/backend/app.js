@@ -1,11 +1,11 @@
-import { MONGODB_URI } from './utils/config'
+import { MONGODB_URI } from './utils/config.js'
 import express from 'express'
 const app = express()
 import cors from 'cors'
 import 'express-async-errors'
-import blogsRouter from './controllers/blogs'
-import usersRouter from './controllers/users'
-import loginRouter from './controllers/login'
+import blogsRouter from './controllers/blogs.js'
+import usersRouter from './controllers/users.js'
+import loginRouter from './controllers/login.js'
 import {
     requestLogger,
     unknownEndpoint,
@@ -36,7 +36,8 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
 if (process.env.NODE_ENV === 'test') {
-    const testingRouter = require('./controllers/testing')
+    const testingRouter = require('./controllers/testing').default.default
+        .default
     app.use('/api/testing', testingRouter)
 }
 

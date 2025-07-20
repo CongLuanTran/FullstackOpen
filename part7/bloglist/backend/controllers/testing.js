@@ -1,12 +1,12 @@
-const router = require("express").Router();
-const Blog = require("../models/blog");
-const User = require("../models/user");
+const router = require('express').Router()
+import { deleteMany as deleteManyBlogs } from '../models/blog'
+import { deleteMany as deleteManyUsers } from '../models/user'
 
-router.post("/reset", async (request, response) => {
-  await Blog.deleteMany({});
-  await User.deleteMany({});
+router.post('/reset', async (_request, response) => {
+    await deleteManyBlogs({})
+    await deleteManyUsers({})
 
-  response.status(204).end();
-});
+    response.status(204).end()
+})
 
-module.exports = router;
+export default router
