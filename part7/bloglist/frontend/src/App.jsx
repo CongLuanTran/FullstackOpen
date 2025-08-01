@@ -41,7 +41,7 @@ const App = () => {
       })
     )
     setTimeout(() => {
-      dispatch(clearNotification)
+      dispatch(clearNotification())
     }, 5000)
   }
 
