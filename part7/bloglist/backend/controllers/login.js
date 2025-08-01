@@ -1,12 +1,13 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const router = require("express").Router();
-const User = require("../models/user");
+import jwt from 'jsonwebtoken'
+import { compare } from 'bcrypt'
+import express from 'express'
+const router = express.Router()
+import User from '../models/user.js'
 
 router.post("/", async (request, response) => {
   const { username, password } = request.body;
 
-  const user = await User.findOne({ username });
+    const user = await User.findOne({ username })
 
   try {
     await bcrypt.compare(password, user.passwordHash);
@@ -28,7 +29,7 @@ router.post("/", async (request, response) => {
     id: user._id,
   };
 
-  const token = jwt.sign(userForToken, process.env.SECRET);
+    const token = jwt.sign(userForToken, process.env.SECRET)
 
   response
     .status(200)

@@ -1,11 +1,10 @@
-const jwt = require("jsonwebtoken");
-const router = require("express").Router();
-const Blog = require("../models/blog");
-const User = require("../models/user");
-const userExtractor = require("../utils/middleware").userExtractor;
+import express from 'express'
+const router = express.Router()
+import Blog from '../models/blog.js'
+import { userExtractor } from '../utils/middleware.js'
 
-router.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
+router.get('/', async (_request, response) => {
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
 
   response.json(blogs);
 });
@@ -37,10 +36,10 @@ router.post("/", userExtractor, async (request, response) => {
 router.delete("/:id", userExtractor, async (request, response) => {
   const user = request.user;
 
-  const blog = await Blog.findById(request.params.id);
-  if (!blog) {
-    return response.status(204).end();
-  }
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+        return response.status(204).end()
+    }
 
   if (blog.user && user.id.toString() !== blog.user.toString()) {
     return response.status(403).json({ error: "user not authorized" });
@@ -67,10 +66,10 @@ router.put("/:id", async (request, response) => {
     likes: body.likes,
   };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
-    new: true,
-  }).populate("user", { username: 1, name: 1 });
-  response.json(updatedBlog);
-});
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+        new: true,
+    }).populate('user', { username: 1, name: 1 })
+    response.json(updatedBlog)
+})
 
 module.exports = router;

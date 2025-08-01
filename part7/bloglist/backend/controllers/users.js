@@ -1,6 +1,7 @@
-const bcrypt = require("bcrypt");
-const router = require("express").Router();
-const User = require("../models/user");
+import express from 'express'
+const router = express.Router()
+import { hash } from 'bcrypt'
+import User from '../models/user.js'
 
 router.post("/", async (request, response) => {
   const { username, name, password } = request.body;
@@ -25,13 +26,13 @@ router.post("/", async (request, response) => {
   response.status(201).json(savedUser);
 });
 
-router.get("/", async (request, response) => {
-  const users = await User.find({}).populate("blogs", {
-    url: 1,
-    title: 1,
-    author: 1,
-  });
-  response.json(users);
-});
+router.get('/', async (_request, response) => {
+    const users = await User.find({}).populate('blogs', {
+        url: 1,
+        title: 1,
+        author: 1,
+    })
+    response.json(users)
+})
 
 module.exports = router;

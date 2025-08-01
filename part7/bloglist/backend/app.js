@@ -10,20 +10,20 @@ import {
     requestLogger,
     unknownEndpoint,
     errorHandler,
-} from './utils/middleware'
-import { info, error as _error } from './utils/logger'
+} from './utils/middleware.js'
+import logger from './utils/logger.js'
 import { set, connect } from 'mongoose'
 
 set('strictQuery', false)
 
-info('connecting to', MONGODB_URI)
+logger.info('connecting to', MONGODB_URI)
 
 connect(MONGODB_URI)
     .then(() => {
-        info('connected to MongoDB')
+        logger.info('connected to MongoDB')
     })
     .catch((error) => {
-        _error('error connection to MongoDB:', error.message)
+        logger.error('error connection to MongoDB:', error.message)
     })
 
 app.use(cors())
