@@ -1,6 +1,7 @@
+import express from 'express'
+const router = express.Router()
 import { hash } from 'bcrypt'
-const router = require('express').Router()
-import User, { find } from '../models/user.js'
+import User from '../models/user.js'
 
 router.post('/', async (request, response) => {
     const { username, name, password } = request.body
@@ -26,7 +27,7 @@ router.post('/', async (request, response) => {
 })
 
 router.get('/', async (_request, response) => {
-    const users = await find({}).populate('blogs', {
+    const users = await User.find({}).populate('blogs', {
         url: 1,
         title: 1,
         author: 1,

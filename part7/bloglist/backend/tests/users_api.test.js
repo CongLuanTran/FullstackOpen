@@ -1,87 +1,87 @@
-const supertest = require("supertest");
-const mongoose = require("mongoose");
-const { test, describe, after, beforeEach } = require("node:test");
-const app = require("../app");
-const api = supertest(app);
-const helper = require("./test_helper");
-const assert = require("assert");
+import supertest from 'supertest'
+import { connection } from 'mongoose'
+import { test, describe, after, beforeEach } from 'node:test'
+import app from '../app.js'
+const api = supertest(app)
+import { usersInDb } from './test_helper.js'
+import { strictEqual } from 'assert'
 
-const User = require("../models/user");
+import { deleteMany } from '../models/user.js'
 
-describe("users", () => {
-  beforeEach(async () => {
-    await User.deleteMany({});
-  });
+describe('users', () => {
+    beforeEach(async () => {
+        await deleteMany({})
+    })
 
-  test("a valid user can be added", async () => {
-    const newUser = {
-      username: "newuser",
-      name: "New User",
-      password: "password",
-    };
+    test('a valid user can be added', async () => {
+        const newUser = {
+            username: 'newuser',
+            name: 'New User',
+            password: 'password',
+        }
 
-    const usersAtStart = await helper.usersInDb();
+        const usersAtStart = await usersInDb()
 
-    const response = await api.post("/api/users").send(newUser).expect(201);
+        const response = await api.post('/api/users').send(newUser).expect(201)
 
-    assert.strictEqual(response.body.username, newUser.username);
-    assert.strictEqual(response.body.name, newUser.name);
+        strictEqual(response.body.username, newUser.username)
+        strictEqual(response.body.name, newUser.name)
 
-    const usersAtEnd = await helper.usersInDb();
+        const usersAtEnd = await usersInDb()
 
-    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1);
-  });
+        strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+    })
 
-  test("user without username is not added", async () => {
-    const newUser = {
-      name: "New User",
-      password: "password",
-    };
+    test('user without username is not added', async () => {
+        const newUser = {
+            name: 'New User',
+            password: 'password',
+        }
 
-    const usersAtStart = await helper.usersInDb();
+        const usersAtStart = await usersInDb()
 
-    const result = await api.post("/api/users").send(newUser).expect(400);
+        const result = await api.post('/api/users').send(newUser).expect(400)
 
-    const usersAtEnd = await helper.usersInDb();
+        const usersAtEnd = await usersInDb()
 
-    assert.strictEqual(usersAtEnd.length, usersAtStart.length);
-  });
+        strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
 
-  test("user without password is not added", async () => {
-    const newUser = {
-      username: "newuser",
-      name: "New User",
-    };
+    test('user without password is not added', async () => {
+        const newUser = {
+            username: 'newuser',
+            name: 'New User',
+        }
 
-    const usersAtStart = await helper.usersInDb();
+        const usersAtStart = await usersInDb()
 
-    const result = await api.post("/api/users").send(newUser).expect(400);
+        const result = await api.post('/api/users').send(newUser).expect(400)
 
-    const usersAtEnd = await helper.usersInDb();
+        const usersAtEnd = await usersInDb()
 
-    assert.strictEqual(result.body.error, "password missing or too short");
-    assert.strictEqual(usersAtEnd.length, usersAtStart.length);
-  });
+        strictEqual(result.body.error, 'password missing or too short')
+        strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
 
-  test.only("same username can not be addwd twice", async () => {
-    const newUser = {
-      username: "newuser",
-      name: "New User",
-      password: "password",
-    };
+    test.only('same username can not be addwd twice', async () => {
+        const newUser = {
+            username: 'newuser',
+            name: 'New User',
+            password: 'password',
+        }
 
-    await api.post("/api/users").send(newUser);
+        await api.post('/api/users').send(newUser)
 
-    const usersAtStart = await helper.usersInDb();
+        const usersAtStart = await usersInDb()
 
-    await api.post("/api/users").send(newUser).expect(400);
+        await api.post('/api/users').send(newUser).expect(400)
 
-    const usersAtEnd = await helper.usersInDb();
+        const usersAtEnd = await usersInDb()
 
-    assert.strictEqual(usersAtEnd.length, usersAtStart.length);
-  });
+        strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
 
-  after(() => {
-    mongoose.connection.close();
-  });
-});
+    after(() => {
+        connection.close()
+    })
+})

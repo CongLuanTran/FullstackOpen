@@ -1,9 +1,10 @@
-const router = require('express').Router()
-import Blog, { find, findById, findByIdAndUpdate } from '../models/blog.js'
+import express from 'express'
+const router = express.Router()
+import Blog from '../models/blog.js'
 import { userExtractor } from '../utils/middleware.js'
 
 router.get('/', async (_request, response) => {
-    const blogs = await find({}).populate('user', { username: 1, name: 1 })
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
 
     response.json(blogs)
 })
@@ -35,7 +36,7 @@ router.post('/', userExtractor, async (request, response) => {
 router.delete('/:id', userExtractor, async (request, response) => {
     const user = request.user
 
-    const blog = await findById(request.params.id)
+    const blog = await Blog.findById(request.params.id)
     if (!blog) {
         return response.status(204).end()
     }
@@ -65,7 +66,7 @@ router.put('/:id', async (request, response) => {
         likes: body.likes,
     }
 
-    const updatedBlog = await findByIdAndUpdate(request.params.id, blog, {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
         new: true,
     }).populate('user', { username: 1, name: 1 })
     response.json(updatedBlog)

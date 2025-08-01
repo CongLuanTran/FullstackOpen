@@ -1,12 +1,13 @@
-import { sign } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { compare } from 'bcrypt'
-const router = require('express').Router()
-import { findOne } from '../models/user'
+import express from 'express'
+const router = express.Router()
+import User from '../models/user.js'
 
 router.post('/', async (request, response) => {
     const { username, password } = request.body
 
-    const user = await findOne({ username })
+    const user = await User.findOne({ username })
 
     try {
         await compare(password, user.passwordHash)
@@ -28,7 +29,7 @@ router.post('/', async (request, response) => {
         id: user._id,
     }
 
-    const token = sign(userForToken, process.env.SECRET)
+    const token = jwt.sign(userForToken, process.env.SECRET)
 
     response
         .status(200)

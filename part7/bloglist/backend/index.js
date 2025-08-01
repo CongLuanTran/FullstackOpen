@@ -1,7 +1,7 @@
-import { listen } from './app.js' // varsinainen Express-sovellus
+import app from './app.js' // varsinainen Express-sovellus
 import { PORT } from './utils/config.js'
-import { info } from './utils/logger.js'
+import logger from './utils/logger.js'
 
-listen(PORT, () => {
-    info(`Server running on port ${PORT}`)
+app.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT}`)
 })
