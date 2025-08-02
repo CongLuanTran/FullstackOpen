@@ -17,12 +17,12 @@ const update = async (id, newObject) => {
   return response.data
 }
 
-const create = async (newObject) => {
+const create = async newObject => {
   const response = await axios.post(baseUrl, newObject, getConfit())
   return response.data
 }
 
-const remove = async (id) => {
+const remove = async id => {
   const response = await axios.delete(`${baseUrl}/${id}`, getConfit())
   return response.data
 }

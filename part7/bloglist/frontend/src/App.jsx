@@ -17,7 +17,7 @@ import { initializeBlogs, createBlog, removeBlog } from './features/blogSlice'
 
 const App = () => {
   const dispatch = useDispatch()
-  const blogs = useSelector((state) => state.blogs)
+  const blogs = useSelector(state => state.blogs)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const App = () => {
     }, 5000)
   }
 
-  const handleLogin = async (credentials) => {
+  const handleLogin = async credentials => {
     try {
       const user = await loginService.login(credentials)
       setUser(user)
@@ -56,13 +56,13 @@ const App = () => {
     }
   }
 
-  const handleCreate = async (blog) => {
+  const handleCreate = async blog => {
     dispatch(createBlog(blog))
     notify(`Blog created: ${blog.title}, ${blog.author}`)
     blogFormRef.current.toggleVisibility()
   }
 
-  const handleVote = async (blog) => {
+  const handleVote = async blog => {
     console.log('updating', blog)
     const updatedBlog = await blogService.update(blog.id, {
       ...blog,
@@ -70,7 +70,7 @@ const App = () => {
     })
 
     notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`)
-    setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)))
+    setBlogs(blogs.map(b => (b.id === blog.id ? updatedBlog : b)))
   }
 
   const handleLogout = () => {
@@ -79,7 +79,7 @@ const App = () => {
     notify(`Bye, ${user.name}!`)
   }
 
-  const handleDelete = async (blog) => {
+  const handleDelete = async blog => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       removeBlog(blog)
       notify(`Blog ${blog.title}, by ${blog.author} removed`)
@@ -109,7 +109,7 @@ const App = () => {
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <NewBlog doCreate={handleCreate} />
       </Togglable>
-      {blogs.sort(byLikes).map((blog) => (
+      {blogs.sort(byLikes).map(blog => (
         <Blog
           key={blog.id}
           blog={blog}
