@@ -13,7 +13,12 @@ import {
   clearNotification,
   showNotification,
 } from './features/notificationSlice'
-import { initializeBlogs, createBlog, removeBlog } from './features/blogSlice'
+import {
+  initializeBlogs,
+  createBlog,
+  removeBlog,
+  likeBlog,
+} from './features/blogSlice'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -64,13 +69,8 @@ const App = () => {
 
   const handleVote = async blog => {
     console.log('updating', blog)
-    const updatedBlog = await blogService.update(blog.id, {
-      ...blog,
-      likes: blog.likes + 1,
-    })
-
+    dispatch(likeBlog(blog))
     notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`)
-    setBlogs(blogs.map(b => (b.id === blog.id ? updatedBlog : b)))
   }
 
   const handleLogout = () => {
