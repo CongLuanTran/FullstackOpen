@@ -9,10 +9,7 @@ import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  clearNotification,
-  showNotification,
-} from './features/notificationSlice'
+import { showNotification } from './features/notificationSlice'
 import {
   initializeBlogs,
   createBlog,
@@ -39,15 +36,7 @@ const App = () => {
   const blogFormRef = createRef()
 
   const notify = (message, type = 'success') => {
-    dispatch(
-      showNotification({
-        message,
-        type,
-      })
-    )
-    setTimeout(() => {
-      dispatch(clearNotification())
-    }, 5000)
+    dispatch(showNotification({ message, type }))
   }
 
   const handleLogin = async credentials => {
