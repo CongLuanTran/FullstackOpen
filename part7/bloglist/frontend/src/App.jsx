@@ -16,21 +16,19 @@ import {
   removeBlog,
   likeBlog,
 } from './features/blogSlice'
+import { userLogin, userLogout, userLoad } from './features/userSlice'
 
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
   useEffect(() => {
-    const user = storage.loadUser()
-    if (user) {
-      setUser(user)
-    }
+    dispatch(userLoad())
   }, [])
 
   const blogFormRef = createRef()
@@ -41,9 +39,7 @@ const App = () => {
 
   const handleLogin = async credentials => {
     try {
-      const user = await loginService.login(credentials)
-      setUser(user)
-      storage.saveUser(user)
+      dispatch(userLogin(credentials))
       notify(`Welcome back, ${user.name}`)
     } catch (error) {
       notify('Wrong credentials', 'error')
@@ -63,14 +59,13 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
-    storage.removeUser()
+    dispatch(userLogout())
     notify(`Bye, ${user.name}!`)
   }
 
   const handleDelete = async blog => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      removeBlog(blog)
+      dispatch(removeBlog(blog))
       notify(`Blog ${blog.title}, by ${blog.author} removed`)
     }
   }
