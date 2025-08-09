@@ -1,11 +1,10 @@
-import { useEffect, createRef } from 'react'
+import { useEffect } from 'react'
 import Login from './components/Login'
 import Blog from './components/Blog'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, createBlog } from './features/blogSlice'
+import { initializeBlogs } from './features/blogSlice'
 import { userLogout, userLoad } from './features/userSlice'
 import { useNotify } from './hooks/useNotify'
 
@@ -22,14 +21,6 @@ const App = () => {
   useEffect(() => {
     dispatch(userLoad())
   }, [])
-
-  const blogFormRef = createRef()
-
-  const handleCreate = async blog => {
-    dispatch(createBlog(blog))
-    notify(`Blog created: ${blog.title}, ${blog.author}`)
-    blogFormRef.current.toggleVisibility()
-  }
 
   const handleLogout = () => {
     dispatch(userLogout())
@@ -56,10 +47,7 @@ const App = () => {
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
       </div>
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <NewBlog doCreate={handleCreate} />
-      </Togglable>
-      {blogs.sort(byLikes).map(blog => (
+      <NewBlog />
       {[...blogs].sort(byLikes).map(blog => (
         <Blog key={blog.id} blog={blog} />
       ))}

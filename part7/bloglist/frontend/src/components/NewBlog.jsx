@@ -1,32 +1,42 @@
-import React, { useState } from 'react'
+import { createRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../features/blogSlice'
+import { useNotify } from '../hooks/useNotify'
+import Togglable from './Togglable'
 
-const NewBlog = ({ doCreate }) => {
+const NewBlog = () => {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
+  const dispatch = useDispatch()
+  const notify = useNotify()
+  const blogFormRef = createRef()
 
-  const handleTitleChange = (event) => {
+  const handleTitleChange = event => {
     setTitle(event.target.value)
   }
 
-  const handleUrlChange = (event) => {
+  const handleUrlChange = event => {
     setUrl(event.target.value)
   }
 
-  const handleAuthorChange = (event) => {
+  const handleAuthorChange = event => {
     setAuthor(event.target.value)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault()
-    doCreate({ title, url, author })
+    dispatch(createBlog({ title, url, author }))
+    notify.success(`Blog created: ${blog.title}, ${blog.author}`)
+    setTitle('')
+    setUrl('')
     setAuthor('')
     setTitle('')
     setUrl('')
   }
 
   return (
-    <div>
+    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
       <h2>Create a New Blog</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -58,7 +68,7 @@ const NewBlog = ({ doCreate }) => {
         </div>
         <button type="submit">Create</button>
       </form>
-    </div>
+    </Togglable>
   )
 }
 
