@@ -50,7 +50,7 @@ export const likeBlog = blog => {
   return async dispatch => {
     const updatedBlog = await blogService.update(blog.id, {
       ...blog,
-      like: blog.like + 1,
+      likes: blog.likes + 1,
     })
     dispatch(updateBlog(updatedBlog))
   }
