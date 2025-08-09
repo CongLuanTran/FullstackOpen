@@ -1,12 +1,22 @@
 import { useState } from 'react'
+import { userLogin } from '../features/userSlice'
+import { useDispatch } from 'react-redux'
+import { useNotify } from '../hooks/useNotify'
 
-const Login = ({ doLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
+  const notify = useNotify()
 
-  const handleLogin = (event) => {
+  const handleLogin = event => {
     event.preventDefault()
-    doLogin({ username, password })
+    try {
+      dispatch(userLogin({ username, password }))
+      notify.success(`Welcome back, ${user.name}`)
+    } catch (error) {
+      notify.error('Wrong credentials')
+    }
     setUsername('')
     setPassword('')
   }
@@ -19,7 +29,7 @@ const Login = ({ doLogin }) => {
           type="text"
           data-testid="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={e => setUsername(e.target.value)}
         />
       </label>
       <label>
@@ -28,7 +38,7 @@ const Login = ({ doLogin }) => {
           type="password"
           value={password}
           data-testid="password"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
         />
       </label>
       <input type="submit" value="Login" />

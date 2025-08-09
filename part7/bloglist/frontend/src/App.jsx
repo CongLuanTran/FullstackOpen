@@ -35,15 +35,6 @@ const App = () => {
 
   const blogFormRef = createRef()
 
-  const handleLogin = async credentials => {
-    try {
-      dispatch(userLogin(credentials))
-      notify(`Welcome back, ${user.name}`)
-    } catch (error) {
-      notify('Wrong credentials', 'error')
-    }
-  }
-
   const handleCreate = async blog => {
     dispatch(createBlog(blog))
     notify(`Blog created: ${blog.title}, ${blog.author}`)
