@@ -1,22 +1,12 @@
-import { useState, useEffect, createRef } from 'react'
-
-import blogService from './services/blogs'
-import loginService from './services/login'
-import storage from './services/storage'
+import { useEffect, createRef } from 'react'
 import Login from './components/Login'
 import Blog from './components/Blog'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
-import { showNotification } from './features/notificationSlice'
-import {
-  initializeBlogs,
-  createBlog,
-  removeBlog,
-  likeBlog,
-} from './features/blogSlice'
-import { userLogin, userLogout, userLoad } from './features/userSlice'
+import { initializeBlogs, createBlog } from './features/blogSlice'
+import { userLogout, userLoad } from './features/userSlice'
 import { useNotify } from './hooks/useNotify'
 
 const App = () => {
