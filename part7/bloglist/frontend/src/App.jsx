@@ -41,22 +41,9 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
-  const handleVote = async blog => {
-    console.log('updating', blog)
-    dispatch(likeBlog(blog))
-    notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`)
-  }
-
   const handleLogout = () => {
     dispatch(userLogout())
-    notify(`Bye, ${user.name}!`)
-  }
-
-  const handleDelete = async blog => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      dispatch(removeBlog(blog))
-      notify(`Blog ${blog.title}, by ${blog.author} removed`)
-    }
+    notify.success(`Bye, ${user.name}!`)
   }
 
   if (!user) {
@@ -83,12 +70,7 @@ const App = () => {
         <NewBlog doCreate={handleCreate} />
       </Togglable>
       {blogs.sort(byLikes).map(blog => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleVote={handleVote}
-          handleDelete={handleDelete}
-        />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   )
