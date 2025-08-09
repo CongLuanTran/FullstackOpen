@@ -17,11 +17,13 @@ import {
   likeBlog,
 } from './features/blogSlice'
 import { userLogin, userLogout, userLoad } from './features/userSlice'
+import { useNotify } from './hooks/useNotify'
 
 const App = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
+  const notify = useNotify()
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -32,10 +34,6 @@ const App = () => {
   }, [])
 
   const blogFormRef = createRef()
-
-  const notify = (message, type = 'success') => {
-    dispatch(showNotification({ message, type }))
-  }
 
   const handleLogin = async credentials => {
     try {
@@ -75,7 +73,7 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         <Notification />
-        <Login doLogin={handleLogin} />
+        <Login />
       </div>
     )
   }
