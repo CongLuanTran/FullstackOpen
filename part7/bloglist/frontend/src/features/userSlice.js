@@ -9,13 +9,13 @@ const userSlice = createSlice({
     setUser(_state, action) {
       return action.payload
     },
-    unsetUser() {
+    clearUser() {
       return null
     },
   },
 })
 
-export const { setUser, unsetUser } = userSlice.actions
+export const { setUser, clearUser } = userSlice.actions
 
 export const userLogin = credentials => {
   return async dispatch => {
@@ -27,7 +27,7 @@ export const userLogin = credentials => {
 
 export const userLogout = () => {
   return async dispatch => {
-    dispatch(unsetUser())
+    dispatch(clearUser())
     storage.removeUser()
   }
 }
