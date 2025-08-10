@@ -27,12 +27,11 @@ const NewBlog = () => {
   const handleSubmit = event => {
     event.preventDefault()
     dispatch(createBlog({ title, url, author }))
-    notify.success(`Blog created: ${blog.title}, ${blog.author}`)
+    notify.success(`Blog created: ${title}, ${author}`)
+    blogFormRef.current.toggleVisibility()
     setTitle('')
     setUrl('')
     setAuthor('')
-    setTitle('')
-    setUrl('')
   }
 
   return (
