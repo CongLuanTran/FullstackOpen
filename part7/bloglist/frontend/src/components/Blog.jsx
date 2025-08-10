@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import storage from '../services/storage'
 import { useDispatch } from 'react-redux'
-import { likeBlog } from '../features/blogSlice'
+import { likeBlog, removeBlog } from '../features/blogSlice'
 import { useNotify } from '../hooks/useNotify'
 
 const Blog = ({ blog }) => {
