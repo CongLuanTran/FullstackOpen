@@ -1,37 +1,31 @@
-import { createRef, useState } from 'react'
+import { createRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../features/blogSlice'
 import { useNotify } from '../hooks/useNotify'
 import Togglable from './Togglable'
+import { useField } from '../hooks/useField'
 
 const NewBlog = () => {
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
-  const [author, setAuthor] = useState('')
+  const title = useField('text')
+  const url = useField('text')
+  const author = useField('text')
   const dispatch = useDispatch()
   const notify = useNotify()
   const blogFormRef = createRef()
 
-  const handleTitleChange = event => {
-    setTitle(event.target.value)
-  }
-
-  const handleUrlChange = event => {
-    setUrl(event.target.value)
-  }
-
-  const handleAuthorChange = event => {
-    setAuthor(event.target.value)
-  }
-
   const handleSubmit = event => {
     event.preventDefault()
-    dispatch(createBlog({ title, url, author }))
+    const newBlog = {
+      title: title.inputProps.value,
+      url: url.inputProps.value,
+      author: author.inputProps.value,
+    }
+    dispatch(createBlog(newBlog))
     notify.success(`Blog created: ${title}, ${author}`)
     blogFormRef.current.toggleVisibility()
-    setTitle('')
-    setUrl('')
-    setAuthor('')
+    title.reset()
+    url.reset()
+    author.reset()
   }
 
   return (
@@ -40,30 +34,15 @@ const NewBlog = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Title:</label>
-          <input
-            type="text"
-            data-testid="title"
-            value={title}
-            onChange={handleTitleChange}
-          />
+          <input {...title.inputProps} data-testid="title" />
         </div>
         <div>
           <label>URL:</label>
-          <input
-            type="text"
-            data-testid="url"
-            value={url}
-            onChange={handleUrlChange}
-          />
+          <input {...url.inputProps} data-testid="url" />
         </div>
         <div>
           <label>Author:</label>
-          <input
-            type="text"
-            data-testid="author"
-            value={author}
-            onChange={handleAuthorChange}
-          />
+          <input {...author.inputProps} data-testid="author" />
         </div>
         <button type="submit">Create</button>
       </form>
