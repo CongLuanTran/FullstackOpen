@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 import { showNotification } from '../features/notificationSlice'
 
 export const useNotify = () => {
-  const dispatch = useDispatch
+  const dispatch = useDispatch()
 
   const success = message => {
     dispatch(showNotification({ message, type: 'success' }))
