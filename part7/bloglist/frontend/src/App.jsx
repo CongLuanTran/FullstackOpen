@@ -44,29 +44,10 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
-  const handleVote = async (blog) => {
-    console.log('updating', blog)
-    const updatedBlog = await blogService.update(blog.id, {
-      ...blog,
-      likes: blog.likes + 1,
-    })
-
-    notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`)
-    setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)))
-  }
-
   const handleLogout = () => {
     setUser(null)
     storage.removeUser()
     notify(`Bye, ${user.name}!`)
-  }
-
-  const handleDelete = async (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(blog.id)
-      setBlogs(blogs.filter((b) => b.id !== blog.id))
-      notify(`Blog ${blog.title}, by ${blog.author} removed`)
-    }
   }
 
   if (!user) {

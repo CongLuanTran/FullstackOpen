@@ -1,9 +1,60 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
+import blogService from '../services/blogs'
 import storage from '../services/storage'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import useNotify from '../hooks/useNotify'
 
-const Blog = ({ blog, handleVote, handleDelete }) => {
+const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false)
+
+  const notify = useNotify()
+  const queryClient = useQueryClient()
+
+  const updateBlogMutation = useMutation({
+    mutationFn: (blog) => blogService.update(blog.id, blog),
+    onMutate: (blog) => {
+      console.log('updating', blog)
+    },
+    onSuccess: (updatedBlog) => {
+      queryClient.setQueryData(['blogs'], (blogs) =>
+        blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+      )
+    },
+  })
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: (blog) => blogService.remove(blog.id),
+    onMutate: (blog) => {
+      console.log('deleting', blog)
+    },
+    onSuccess: (_data, blog) => {
+      queryClient.setQueryData(['blogs'], (blogs) =>
+        blogs.filter((b) => b.id != blog.id)
+      )
+    },
+  })
+
+  const handleVote = (blog) => {
+    updateBlogMutation.mutate(
+      { ...blog, likes: blog.likes + 1 },
+      {
+        onSuccess: (updatedBlog) => {
+          notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`)
+        },
+      }
+    )
+  }
+
+  const handleDelete = (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      deleteBlogMutation.mutate(blog, {
+        onSuccess: (_data, blog) => {
+          notify(`Blog ${blog.title}, by ${blog.author} removed`)
+        },
+      })
+    }
+  }
 
   const nameOfUser = blog.user ? blog.user.name : 'anonymous'
 
@@ -21,10 +72,7 @@ const Blog = ({ blog, handleVote, handleDelete }) => {
   return (
     <div style={style} className="blog">
       {blog.title} by {blog.author}
-      <button
-        style={{ marginLeft: 3 }}
-        onClick={() => setVisible(!visible)}
-      >
+      <button style={{ marginLeft: 3 }} onClick={() => setVisible(!visible)}>
         {visible ? 'hide' : 'view'}
       </button>
       {visible && (
@@ -34,18 +82,13 @@ const Blog = ({ blog, handleVote, handleDelete }) => {
           </div>
           <div>
             likes {blog.likes}
-            <button
-              style={{ marginLeft: 3 }}
-              onClick={() => handleVote(blog)}
-            >
+            <button style={{ marginLeft: 3 }} onClick={() => handleVote(blog)}>
               like
             </button>
           </div>
           <div>{nameOfUser}</div>
           {canRemove && (
-            <button onClick={() => handleDelete(blog)}>
-              remove
-            </button>
+            <button onClick={() => handleDelete(blog)}>remove</button>
           )}
         </div>
       )}
@@ -60,8 +103,6 @@ Blog.propTypes = {
     likes: PropTypes.number.isRequired,
     user: PropTypes.object,
   }).isRequired,
-  handleVote: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
 }
 
 export default Blog
