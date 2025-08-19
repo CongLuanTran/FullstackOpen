@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 
-const Login = ({ doLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const { handleLogin: doLogin } = useAuth()
 
   const handleLogin = (event) => {
     event.preventDefault()

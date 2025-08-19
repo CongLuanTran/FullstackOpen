@@ -1,45 +1,18 @@
-import { useState, useEffect, createRef } from 'react'
-
-import loginService from './services/login'
-import storage from './services/storage'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import BlogList from './components/BlogList'
+import { useAuth } from './context/AuthContext'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    const user = storage.loadUser()
-    if (user) {
-      setUser(user)
-    }
-  }, [])
-
-  const handleLogin = async (credentials) => {
-    try {
-      const user = await loginService.login(credentials)
-      setUser(user)
-      storage.saveUser(user)
-      notify(`Welcome back, ${user.name}`)
-    } catch (error) {
-      notify('Wrong credentials', 'error')
-    }
-  }
-
-  const handleLogout = () => {
-    setUser(null)
-    storage.removeUser()
-    notify(`Bye, ${user.name}!`)
-  }
+  const { user, handleLogout } = useAuth()
 
   if (!user) {
     return (
       <div>
         <h2>blogs</h2>
         <Notification />
-        <Login doLogin={handleLogin} />
+        <Login />
       </div>
     )
   }
