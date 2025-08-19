@@ -4,18 +4,13 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './services/storage'
 import Login from './components/Login'
-import Blog from './components/Blog'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import BlogList from './components/BlogList'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
 
   useEffect(() => {
     const user = storage.loadUser()
@@ -60,8 +55,6 @@ const App = () => {
     )
   }
 
-  const byLikes = (a, b) => b.likes - a.likes
-
   return (
     <div>
       <h2>blogs</h2>
@@ -73,14 +66,7 @@ const App = () => {
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <NewBlog doCreate={handleCreate} />
       </Togglable>
-      {blogs.sort(byLikes).map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleVote={handleVote}
-          handleDelete={handleDelete}
-        />
-      ))}
+      <BlogList />
     </div>
   )
 }
