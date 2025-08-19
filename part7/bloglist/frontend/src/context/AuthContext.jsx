@@ -1,13 +1,13 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import loginService from '../services/login'
 import storage from '../services/storage'
-import useNotify from '../hooks/useNotify'
+import { useNotification } from './NotificationContext'
 
 const AuthContext = createContext()
 
 export const AuthContextProvider = (props) => {
   const [user, setUser] = useState(null)
-  const notify = useNotify()
+  const { notify } = useNotification()
 
   useEffect(() => {
     const user = storage.loadUser()

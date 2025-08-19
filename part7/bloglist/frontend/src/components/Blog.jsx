@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 import storage from '../services/storage'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import useNotify from '../hooks/useNotify'
+import { useNotification } from '../context/NotificationContext'
 
 const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false)
 
-  const notify = useNotify()
+  const { notify } = useNotification()
   const queryClient = useQueryClient()
 
   const updateBlogMutation = useMutation({
