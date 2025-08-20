@@ -2,7 +2,9 @@ import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import BlogList from './components/BlogList'
+import UserList from './components/UserList'
 import { useAuth } from './context/AuthContext'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 const App = () => {
   const { user, handleLogout } = useAuth()
@@ -18,16 +20,26 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <h2>blogs</h2>
       <Notification />
       <div>
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
       </div>
-      <NewBlog />
-      <BlogList />
-    </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div>
+              <NewBlog />
+              <BlogList />
+            </div>
+          }
+        />
+        <Route path="/users" element={<UserList />} />
+      </Routes>
+    </Router>
   )
 }
 
