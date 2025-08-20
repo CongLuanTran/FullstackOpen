@@ -6,11 +6,11 @@ const api = supertest(app)
 import { usersInDb } from './test_helper.js'
 import { strictEqual } from 'assert'
 
-import { deleteMany } from '../models/user.js'
+import User from '../models/user.js'
 
 describe('users', () => {
     beforeEach(async () => {
-        await deleteMany({})
+        await User.deleteMany({})
     })
 
     test('a valid user can be added', async () => {
