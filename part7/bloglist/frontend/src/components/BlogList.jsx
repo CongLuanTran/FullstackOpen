@@ -13,7 +13,6 @@ const BlogList = () => {
   }
 
   const blogs = result.data
-  console.log(blogs)
   const byLikes = (a, b) => b.likes - a.likes
 
   return (
