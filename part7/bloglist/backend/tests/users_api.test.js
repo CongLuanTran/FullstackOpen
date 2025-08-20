@@ -6,11 +6,11 @@ const api = supertest(app)
 import { usersInDb } from './test_helper.js'
 import { strictEqual } from 'assert'
 
-import { deleteMany } from '../models/user.js'
+import User from '../models/user.js'
 
 describe('users', () => {
     beforeEach(async () => {
-        await deleteMany({})
+        await User.deleteMany({})
     })
 
     test('a valid user can be added', async () => {
@@ -40,7 +40,7 @@ describe('users', () => {
 
         const usersAtStart = await usersInDb()
 
-        const result = await api.post('/api/users').send(newUser).expect(400)
+        await api.post('/api/users').send(newUser).expect(400)
 
         const usersAtEnd = await usersInDb()
 
@@ -63,7 +63,7 @@ describe('users', () => {
         strictEqual(usersAtEnd.length, usersAtStart.length)
     })
 
-    test.only('same username can not be addwd twice', async () => {
+    test.only('same username can not be added twice', async () => {
         const newUser = {
             username: 'newuser',
             name: 'New User',

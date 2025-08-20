@@ -6,8 +6,8 @@ const api = supertest(app)
 import { initialBlogs, blogsInDb } from './test_helper.js'
 import assert, { strictEqual } from 'assert'
 
-import Blog, { deleteMany } from '../models/blog.js'
-import { deleteMany as _deleteMany } from '../models/user.js'
+import Blog from '../models/blog.js'
+import User from '../models/user.js'
 
 const testUser = {
     username: 'testuser',
@@ -19,8 +19,8 @@ let token
 
 describe('when there is initially some blogs saved', () => {
     beforeEach(async () => {
-        await deleteMany({})
-        await _deleteMany({})
+        await Blog.deleteMany({})
+        await User.deleteMany({})
 
         const blogObjects = initialBlogs.map((blog) => new Blog(blog))
 
@@ -122,10 +122,7 @@ describe('when there is initially some blogs saved', () => {
             likes: 5,
         }
 
-        const postResponse = await api
-            .post('/api/blogs')
-            .send(newBlog)
-            .expect(401)
+        await api.post('/api/blogs').send(newBlog).expect(401)
     })
 
     test('blog without url is not added', async () => {
