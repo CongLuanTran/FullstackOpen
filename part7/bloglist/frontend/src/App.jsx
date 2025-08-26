@@ -1,10 +1,10 @@
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import BlogList from './components/BlogList'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
-import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import { useAuth } from './context/AuthContext'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import User from './components/User'
 
 const App = () => {
