@@ -5,6 +5,7 @@ import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import { useAuth } from './context/AuthContext'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import User from './components/User'
 
 const App = () => {
   const { user, handleLogout } = useAuth()
@@ -37,6 +38,7 @@ const App = () => {
             </div>
           }
         />
+        <Route path="/users/:id" element={<User />} />
         <Route path="/users" element={<UserList />} />
       </Routes>
     </Router>
