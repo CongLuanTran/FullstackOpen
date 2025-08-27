@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createRef, useState } from 'react'
 import { useNotification } from '../context/NotificationContext'
-import blogService from '../services/blogs'
 import Togglable from './Togglable'
+import { useAddBlog } from '../hooks/useAddBlog'
 
 const NewBlog = () => {
   const [title, setTitle] = useState('')
@@ -10,19 +9,9 @@ const NewBlog = () => {
   const [author, setAuthor] = useState('')
 
   const blogFormRef = createRef()
-  const queryClient = useQueryClient()
   const { notify } = useNotification()
 
-  const newBlogMutation = useMutation({
-    mutationFn: blogService.create,
-    onMutate: (blog) => {
-      console.log('creating', blog)
-    },
-    onSuccess: (newBlog) => {
-      queryClient.setQueryData(['blogs'], (blogs) => blogs.concat(newBlog))
-    },
-  })
-
+  const newBlogMutation = useAddBlog()
   const handleCreate = (blog) => {
     newBlogMutation.mutate(blog, {
       onSuccess: (newBlog) => {

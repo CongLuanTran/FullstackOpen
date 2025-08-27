@@ -1,39 +1,17 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useNotification } from '../context/NotificationContext'
-import blogService from '../services/blogs'
+import { useUpdateBlog } from '../hooks/useUpdateBlog'
 import storage from '../services/storage'
+import { useDeleteBlog } from '../hooks/useDeleteBlog'
 
 const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false)
 
   const { notify } = useNotification()
-  const queryClient = useQueryClient()
+  const updateBlogMutation = useUpdateBlog()
+  const deleteBlogMutation = useDeleteBlog()
 
-  const updateBlogMutation = useMutation({
-    mutationFn: (blog) => blogService.update(blog.id, blog),
-    onMutate: (blog) => {
-      console.log('updating', blog)
-    },
-    onSuccess: (updatedBlog) => {
-      queryClient.setQueryData(['blogs'], (blogs) =>
-        blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-      )
-    },
-  })
-
-  const deleteBlogMutation = useMutation({
-    mutationFn: (blog) => blogService.remove(blog.id),
-    onMutate: (blog) => {
-      console.log('deleting', blog)
-    },
-    onSuccess: (_data, blog) => {
-      queryClient.setQueryData(['blogs'], (blogs) =>
-        blogs.filter((b) => b.id != blog.id)
-      )
-    },
-  })
 
   const handleVote = (blog) => {
     updateBlogMutation.mutate(

@@ -1,18 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
-import userService from '../services/users'
 import { Link } from 'react-router-dom'
+import { useUsers } from '../hooks/useUsers'
 
 const UserList = () => {
-  const result = useQuery({
-    queryKey: ['users'],
-    queryFn: userService.getAll,
-  })
+  const { data: users, isLoading } = useUsers()
 
-  if (result.isLoading) {
+  if (isLoading) {
     return <p>Loading...</p>
   }
 
-  const users = result.data
   const byBlogs = (a, b) => b.blogs.length - a.blogs.length
 
   return (
