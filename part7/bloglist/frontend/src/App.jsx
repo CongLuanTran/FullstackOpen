@@ -6,6 +6,7 @@ import Notification from './components/Notification'
 import User from './components/User'
 import UserList from './components/UserList'
 import { useAuth } from './context/AuthContext'
+import Blog from './components/Blog'
 
 const App = () => {
   const { user, handleLogout } = useAuth()
@@ -40,6 +41,7 @@ const App = () => {
         />
         <Route path="/users/:id" element={<User />} />
         <Route path="/users" element={<UserList />} />
+        <Route path="/blogs/:id" element={<Blog />} />
       </Routes>
     </Router>
   )
