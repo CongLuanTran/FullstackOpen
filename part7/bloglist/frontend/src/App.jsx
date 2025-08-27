@@ -51,6 +51,15 @@ const App = () => {
             </div>
           }
         />
+        <Route
+          path="/blogs"
+          element={
+            <div>
+              <NewBlog />
+              <BlogList />
+            </div>
+          }
+        />
         <Route path="/users/:id" element={<User />} />
         <Route path="/users" element={<UserList />} />
         <Route path="/blogs/:id" element={<Blog />} />
