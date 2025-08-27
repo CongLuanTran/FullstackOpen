@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 import userService from '../services/users'
 
 const User = () => {
@@ -15,6 +15,8 @@ const User = () => {
 
   const users = result.data
   const user = users.find((u) => u.id === id)
+
+  if (!user) return null
 
   return (
     <div>

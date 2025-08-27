@@ -3,9 +3,9 @@ import BlogList from './components/BlogList'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
+import User from './components/User'
 import UserList from './components/UserList'
 import { useAuth } from './context/AuthContext'
-import User from './components/User'
 
 const App = () => {
   const { user, handleLogout } = useAuth()
