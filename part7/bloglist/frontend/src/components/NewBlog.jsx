@@ -1,7 +1,7 @@
 import { createRef, useState } from 'react'
 import { useNotification } from '../context/NotificationContext'
-import Togglable from './Togglable'
 import { useAddBlog } from '../hooks/useAddBlog'
+import Togglable from './Togglable'
 
 const NewBlog = () => {
   const [title, setTitle] = useState('')

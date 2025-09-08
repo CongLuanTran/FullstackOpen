@@ -1,5 +1,5 @@
-import { useBlogs } from '../hooks/useBlogs'
 import { Link } from 'react-router-dom'
+import { useBlogs } from '../hooks/useBlogs'
 
 const BlogList = () => {
   const { data: blogs, isLoading } = useBlogs()
