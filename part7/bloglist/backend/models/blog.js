@@ -9,6 +9,7 @@ const schema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
+    comments: [{ text: String }],
 })
 
 schema.set('toJSON', {

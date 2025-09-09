@@ -9,6 +9,20 @@ router.get('/', async (_request, response) => {
     response.json(blogs)
 })
 
+router.post('/:id/comments', async (request, response) => {
+    const blog = await Blog.findById(request.params.id)
+
+    if (!blog) {
+        return response.status(204).end()
+    }
+
+    blog.comments.push({ text: request.body.text })
+
+    await blog.save()
+
+    response.status(201).json(blog)
+})
+
 router.post('/', userExtractor, async (request, response) => {
     const blog = new Blog(request.body)
 
