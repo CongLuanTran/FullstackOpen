@@ -1,11 +1,12 @@
+import { useState } from 'react'
+import { Button, Col, Form, ListGroup, Row, Stack } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import { useNotification } from '../context/NotificationContext'
+import { useAddComment } from '../hooks/useAddComment'
 import { useBlogs } from '../hooks/useBlogs'
 import { useDeleteBlog } from '../hooks/useDeleteBlog'
 import { useUpdateBlog } from '../hooks/useUpdateBlog'
 import storage from '../services/storage'
-import { useState } from 'react'
-import { useAddComment } from '../hooks/useAddComment'
 
 const Blog = () => {
   const [comment, setComment] = useState('')
@@ -46,7 +47,7 @@ const Blog = () => {
     addCommentMutation.mutate(
       { id: blog.id, text: comment },
       {
-        onSuccess: (_data, { id, text }) => {
+        onSuccess: (_data, { text }) => {
           notify(`Comment ${text} added`)
         },
       }
@@ -63,7 +64,7 @@ const Blog = () => {
   console.log(blog.user, storage.me(), canRemove)
 
   return (
-    <div>
+    <Stack gap={2}>
       <h2>
         {blog.title} by {blog.author}
       </h2>
@@ -72,35 +73,53 @@ const Blog = () => {
       </div>
       <div>
         likes {blog.likes}
-        <button style={{ marginLeft: 3 }} onClick={() => handleVote(blog)}>
+        <Button className="ms-3 py-1" onClick={() => handleVote(blog)}>
           like
-        </button>
+        </Button>
       </div>
       <div>added by {nameOfUser}</div>
-      {canRemove && <button onClick={() => handleDelete(blog)}>remove</button>}
+      {canRemove && (
+        <Button
+          variant="danger"
+          className="me-auto"
+          onClick={() => handleDelete(blog)}
+        >
+          remove
+        </Button>
+      )}
 
       <h3>comments</h3>
-      <form
+      <Form
         onSubmit={(event) => {
           event.preventDefault()
           handleAddComment(blog, comment)
           setComment('')
         }}
       >
-        <input
-          type="text"
-          data-testid="comment"
-          value={comment}
-          onChange={(event) => setComment(event.target.value)}
-        />
-        <button type="submit">add comment</button>
-      </form>
-      <ul>
-        {blog.comments.map((comment, index) => (
-          <li key={index}>{comment.text}</li>
-        ))}
-      </ul>
-    </div>
+        <Row>
+          <Col xs={6} className="pe-0">
+            <Form.Control
+              type="text"
+              data-testid="comment"
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+            />
+          </Col>
+          <Col>
+            <Button variant="secondary" type="submit">
+              add comment
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+      <Col xs={6}>
+        <ListGroup>
+          {blog.comments.map((comment, index) => (
+            <ListGroup.Item key={index}>{comment.text}</ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Col>
+    </Stack>
   )
 }
 

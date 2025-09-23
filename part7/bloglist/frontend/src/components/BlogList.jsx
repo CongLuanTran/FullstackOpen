@@ -1,7 +1,8 @@
+import { Stack } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useBlogs } from '../hooks/useBlogs'
 
-const BlogList = () => {
+const BlogList = ({ className }) => {
   const { data: blogs, isLoading } = useBlogs()
 
   if (isLoading) {
@@ -18,7 +19,7 @@ const BlogList = () => {
   }
 
   return (
-    <div>
+    <Stack className={className} gap={1}>
       {[...blogs].sort(byLikes).map((blog) => (
         <div key={blog.id} style={style}>
           <Link to={`/blogs/${blog.id}`}>
@@ -26,7 +27,7 @@ const BlogList = () => {
           </Link>
         </div>
       ))}
-    </div>
+    </Stack>
   )
 }
 

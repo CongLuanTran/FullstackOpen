@@ -1,4 +1,5 @@
 import { createRef, useState } from 'react'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useNotification } from '../context/NotificationContext'
 import { useAddBlog } from '../hooks/useAddBlog'
 import Togglable from './Togglable'
@@ -44,36 +45,48 @@ const NewBlog = () => {
   return (
     <Togglable buttonLabel="create new blog" ref={blogFormRef}>
       <h2>Create a New Blog</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
-          <input
-            type="text"
-            data-testid="title"
-            value={title}
-            onChange={handleTitleChange}
-          />
-        </div>
-        <div>
-          <label>URL:</label>
-          <input
-            type="text"
-            data-testid="url"
-            value={url}
-            onChange={handleUrlChange}
-          />
-        </div>
-        <div>
-          <label>Author:</label>
-          <input
-            type="text"
-            data-testid="author"
-            value={author}
-            onChange={handleAuthorChange}
-          />
-        </div>
-        <button type="submit">Create</button>
-      </form>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group as={Row} className="mb-3" controlId="formTitle">
+          <Form.Label column sm="2">
+            Title:
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              type="text"
+              data-testid="title"
+              value={title}
+              onChange={handleTitleChange}
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3" controlId="formURL">
+          <Form.Label column sm="2">
+            URL:
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              type="text"
+              data-testid="url"
+              value={url}
+              onChange={handleUrlChange}
+            />
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm="2">
+            Author:
+          </Form.Label>
+          <Col sm="10">
+            <Form.Control
+              type="text"
+              data-testid="author"
+              value={author}
+              onChange={handleAuthorChange}
+            />
+          </Col>
+        </Form.Group>
+        <Button type="submit">Create</Button>
+      </Form>
     </Togglable>
   )
 }

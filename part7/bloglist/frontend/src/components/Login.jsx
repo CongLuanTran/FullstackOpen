@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useAuth } from '../context/AuthContext'
 
 const Login = () => {
@@ -14,27 +15,35 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <label>
-        Username:
-        <input
-          type="text"
-          data-testid="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </label>
-      <label>
-        Password:
-        <input
-          type="password"
-          value={password}
-          data-testid="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      <input type="submit" value="Login" />
-    </form>
+    <Form onSubmit={handleLogin}>
+      <Row>
+        <Col xs={4}>
+          <Form.Group>
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              data-testid="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </Form.Group>
+        </Col>
+        <Col xs={4}>
+          <Form.Group>
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              value={password}
+              data-testid="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+        </Col>
+        <Col xs={1} className="d-flex align-items-end">
+          <Button type="submit">Login</Button>
+        </Col>
+      </Row>
+    </Form>
   )
 }
 
